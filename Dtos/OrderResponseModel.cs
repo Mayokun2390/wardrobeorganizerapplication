@@ -12,14 +12,14 @@ namespace WardrobeOrganizerApp.Dtos
         public Guid Id{ get; set; } 
         public DateTime DateTime{ get; set; }
         public decimal TotalPrice{ get; set; }
-        public string CustomerId{ get; set; }
-        public string ProductId{ get; set; }
+        public string CustomerId{ get; set; } = default!;
+        public string ProductId{ get; set; } = default!;
         public Status Status { get; set; }
-        public Customer Customer{ get; set; }
-        public ICollection<OrderProduct> OrderProducts{ get; set; } = new List<OrderProduct>();
+        public Customer Customer{ get; set; } = default!;
+        public ICollection<OrderProduct> OrderProducts{ get; set; } = new HashSet<OrderProduct>();
         public int Quantity{ get; set; }
         public bool IsApproved {get; set; }
-        public ICollection<Order> Orders { get; set; } = new List<Order>();
+        public ICollection<Order> Orders { get; set; } = new HashSet<Order>();
     }
 
 

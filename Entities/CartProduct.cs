@@ -9,8 +9,8 @@ namespace WardrobeOrganizerApp.Entities
     {
         public string Id { get; set; } = Guid.NewGuid().ToString();
         public string CartId { get; set; } =  Guid.NewGuid().ToString();
-        public Cart Cart { get; set; } 
+        public Cart Cart { get; set; } = default!;
         public string ProductId { get; set; } =  Guid.NewGuid().ToString();
-        public Product Product { get; set; } 
+        public Product Product { get; set; } = default!;
     }
 }

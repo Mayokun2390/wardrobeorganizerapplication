@@ -209,6 +209,7 @@ namespace WardrobeOrganizerApp.Services.Implementation
                 LastName = customer.LastName,
                 PhoneNumber = customer.PhoneNumber,
                 Email = customer.Email,
+
             };
             return new Response<CustomerResponseModel>
             {

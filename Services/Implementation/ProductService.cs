@@ -17,7 +17,7 @@ namespace WardrobeOrganizerApp.Services.Implementation
         private readonly IUserInterface _userInterface;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public ProductService(IProductInterface productInterface, IUnitOfWork unitofwork, ICurrentUser currentUser, IWebHostEnvironment webHostEnvironment)
+        public ProductService(IProductInterface productInterface, IUnitOfWork unitofwork, IWebHostEnvironment webHostEnvironment, ICurrentUser currentUser)
         {
             _productInterface = productInterface;
             _unitofwork = unitofwork;

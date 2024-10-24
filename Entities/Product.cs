@@ -15,8 +15,8 @@ namespace WardrobeOrganizerApp.Entities
         public string ImageUrl{ get; set; } = default!;
         public Category Category{ get; set; } = default!;
         public ICollection<OrderProduct> OrderProducts{get; set; } = new List<OrderProduct>();
-        public Cart cart { get; set; }
-        public string CartId{ get; set; }
+        public Cart cart { get; set; } = default!;
+        public string CartId{ get; set; } = default!;
 
     }
 }

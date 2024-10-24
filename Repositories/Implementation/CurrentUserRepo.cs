@@ -7,13 +7,9 @@ using WardrobeOrganizerApp.Repositories.Interface;
 
 namespace WardrobeOrganizerApp.Repositories.Implementation
 {
-    public class CurrentUserRepo : ICurrentUser
+    public class CurrentUserRepo(IHttpContextAccessor _httpContextAccessor) : ICurrentUser
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        public CurrentUserRepo(HttpContextAccessor httpContextAccessor)
-        {
-            _httpContextAccessor = httpContextAccessor;
-        }
+        
         public string GetCurrentUser()
         {
             try

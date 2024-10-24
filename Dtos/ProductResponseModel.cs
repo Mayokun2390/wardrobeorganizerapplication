@@ -16,9 +16,9 @@ namespace WardrobeOrganizerApp.Dtos
         public Category Category{ get; set; } = default!;
 
         public string ImageUrl{ get; set; } = default!;
-        public ICollection<OrderProduct> OrderProducts{get; set; } = new List<OrderProduct>();
-        public Cart cart { get; set; }
-        public string CartId{ get; set; }
+        public ICollection<OrderProduct> OrderProducts{get; set; } = new HashSet<OrderProduct>();
+        public Cart cart { get; set; } = default!;
+        public string CartId{ get; set; } = default!;
     }
 
 
@@ -29,7 +29,7 @@ namespace WardrobeOrganizerApp.Dtos
         public decimal Price{ get; set; }
         public Category Category{ get; set; } = default!;
         public IFormFile ImageUrl{ get; set; } = default!;
-        public string CartId{ get; set; }
+        public string CartId{ get; set; } = default!;
         public Guid Id{ get; set; } 
 
     }

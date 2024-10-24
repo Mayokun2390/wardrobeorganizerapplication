@@ -8,6 +8,7 @@ namespace WardrobeOrganizerApp.Services.Interface
 {
     public interface ICartService
     {
+        Task<Response<CartResponseModel>> Create (CartRequestModel model);
         Task<Response<CartResponseModel>> AddToCart (CartRequestModel model);
         Task<Response<ICollection<CartResponseModel>>> GetAll ();
         Task<Response<CartResponseModel>> Update (CartRequestModel model);

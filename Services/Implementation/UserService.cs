@@ -11,9 +11,11 @@ namespace WardrobeOrganizerApp.Services.Implementation
     public class UserService : IUserService
     {
         private readonly IUserInterface _userInterface;
-        public UserService(IUserInterface userInterface)
+        private readonly IJWTSettingsService _jWTSettingsService;
+        public UserService(IUserInterface userInterface, IJWTSettingsService jWTSettingsService)
         {
             _userInterface = userInterface;
+            _jWTSettingsService = jWTSettingsService;
         }
         public async Task<Response<UserResponseModel>> Login(LoginRequestModel model)
         {
@@ -35,6 +37,9 @@ namespace WardrobeOrganizerApp.Services.Implementation
                     Status = false,
                 };
             }
+
+            var token = _jWTSettingsService.GenerateToken(user);
+            
             return new Response<UserResponseModel>
             {
                 Message = "Login Successful",
@@ -44,6 +49,7 @@ namespace WardrobeOrganizerApp.Services.Implementation
                     Id = user.Id,
                     Email = user.Email,
                     role = user.role,
+                    Token = token,
                 }
             };
         }

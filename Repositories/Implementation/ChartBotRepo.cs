@@ -36,7 +36,7 @@ namespace WardrobeOrganizerApp.Repositories.Implementation
 
         public async Task<ChartBot> GetById(Guid id)
         {
-            var getId = await _context.ChartBots.FirstOrDefaultAsync(c => c.Id == id);
+            var getId = await _context.ChartBots.Include(c => c.Customer).FirstOrDefaultAsync(c => c.Id == id);
             return getId;
         }
 

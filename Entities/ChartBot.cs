@@ -11,7 +11,7 @@ namespace WardrobeOrganizerApp.Entities
         public string MessageText {get; set;} = default!;
         public string ResponseText {get; set;} = default!;
         public DateTime DateCreated{get; set; }
-        public Customer Customer {get; set;}
+        public Customer Customer {get; set;} = default!;
         // public string CustomerId {get; set;} 
 
     }

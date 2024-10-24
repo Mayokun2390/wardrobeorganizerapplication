@@ -10,7 +10,7 @@ namespace WardrobeOrganizerApp.Dtos
     {
         public Guid Id{ get; set; } 
         public string Name { get; set; } = default!;
-        public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
+        public ICollection<UserRole> UserRoles { get; set; } = new HashSet<UserRole>();
     }
 
     public class RoleRequestModel

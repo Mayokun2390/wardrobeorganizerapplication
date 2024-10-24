@@ -20,7 +20,37 @@ namespace WardrobeOrganizerApp.Services.Implementation
             _productInterface = productInterface;
             _unitofwork = unitofwork;
         }
+
         public async Task<Response<CartResponseModel>> AddToCart(CartRequestModel model)
+        {
+            var checkProduct = await _productInterface.GetById(model.Id);
+            if (checkProduct == null)
+            {
+                return new Response<CartResponseModel>
+                {
+                    Message = "Product not found",
+                    Status = false,
+                };
+            }
+            var checkCart = await _cartInterface.GetCart(model.Id);
+            if (checkCart == null)
+            {
+                return new Response<CartResponseModel>
+                {
+                    Message = "Cart not found",
+                    Status = false,
+                };
+            };
+            checkProduct.Quantity += checkCart.Quantity;
+            _cartInterface.Update(checkCart);
+            return new Response<CartResponseModel>
+            {
+                Message = "Product created successfully",
+                Status = true,
+            };
+        }
+
+        public async Task<Response<CartResponseModel>> Create(CartRequestModel model)
         {
             var getCart = await _cartInterface.GetCart(model.Id);
             if (getCart == null)
@@ -38,7 +68,19 @@ namespace WardrobeOrganizerApp.Services.Implementation
                 Quantity = model.Quantity, 
                 TotalPrice = model.TotalPrice,
             };
-            
+            await _cartInterface.Create(cart);
+            return new Response<CartResponseModel>
+            {
+                Message = "Cart created Successfully",
+                Status = true,
+                Value = new CartResponseModel
+                    {
+                        Id = cart.Id,
+                        NameOfProduct = cart.NameOfProduct,
+                        Quantity = cart.Quantity,
+                        TotalPrice = cart.TotalPrice,
+                    }
+            };
         }
 
         public async Task<Response<CartResponseModel>> Delete(Guid id)

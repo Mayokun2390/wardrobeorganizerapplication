@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using WardrobeOrganizerApp.Context;
@@ -22,10 +23,28 @@ namespace WardrobeOrganizerApp.Repositories.Implementation
             return true;
         }
 
+        public async Task<ICollection<Payment>> GetAllCompletedPayment(Expression<Func<Payment, bool>> predicate)
+        {
+           var paym = await _context.Payments.Where(predicate).ToListAsync();
+           return paym;
+        }
+
+        public async Task<ICollection<Payment>> GetAllFailedPayment(Expression<Func<Payment, bool>> predicate)
+        {
+            var pay = await _context.Payments.Where(predicate).ToListAsync();
+           return pay;
+        }
+
         public async Task<ICollection<Payment>> GetAllPayment()
         {
             var payment = await _context.Payments.ToListAsync();
             return payment;
+        }
+
+        public async Task<ICollection<Payment>> GetAllPendingPayment(Expression<Func<Payment, bool>> predicate)
+        {
+            var paym = await _context.Payments.Where(predicate).ToListAsync();
+           return paym;
         }
 
         public async Task<Payment> GetById(Guid id)

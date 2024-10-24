@@ -15,9 +15,6 @@ namespace WardrobeOrganizerApp.Context
 
         }
 
-
-
-
         public DbSet<Cart> Carts {get;set;}
         public DbSet<CartProduct> CartProducts {get;set;}
         public DbSet<ChartBot> ChartBots{get;set;}
@@ -45,7 +42,7 @@ namespace WardrobeOrganizerApp.Context
             var admin = RoleConstant.Admin;
 
 
-            var Username = "Mayokun";
+            var username = "Mayokun";
             var Email = "admin@gmail.com";
             var PasswordSort = BCrypt.Net.BCrypt.GenerateSalt();
             var PasswordHash = BCrypt.Net.BCrypt.HashPassword("admin", PasswordSort);
@@ -54,6 +51,7 @@ namespace WardrobeOrganizerApp.Context
                 new User
                 {
                     Id = UserId,
+                    UserName = username,
                     Email = Email,
                     PasswordSort = PasswordSort,
                     PasswordHash = PasswordHash,

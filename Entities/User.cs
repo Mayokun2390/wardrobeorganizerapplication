@@ -9,11 +9,11 @@ namespace WardrobeOrganizerApp.Entities
     {
         public Guid Id{ get; set; } 
         public string Email { get; set; } = default!;
-        public string Username { get; set; } = default!;
+        public string UserName { get; set; } = default!;
         public string PasswordHash { get; set; } = default!;
         public string PasswordSort { get; set; } = default!;
+        public string Token { get; set; } = default!;
         public string role {get; set; } = default!;
-
         public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
     }
 }

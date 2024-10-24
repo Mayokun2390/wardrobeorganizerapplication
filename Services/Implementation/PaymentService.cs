@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using PayStack.Net;
 using WardrobeOrganizerApp.Dtos;
 using WardrobeOrganizerApp.Entities;
+using WardrobeOrganizerApp.Enums;
 using WardrobeOrganizerApp.Repositories.Interface;
 using WardrobeOrganizerApp.Services.Interface;
 
@@ -92,13 +93,66 @@ namespace WardrobeOrganizerApp.Services.Implementation
             };
         }
 
-        public async Task<Response<PaymentResponseModel>> MakePayment(PaymentRequestModel model)
+        public async Task<Response<PaymentResponseModel>> MakePayment(Guid id)
         {
-            var current = _userInterface.GetUserAsync(x => x.Email == _currentUser.GetCurrentUser());
-            if (current == null)
+            var getcurrentcustomer = await _customerInterface.GetCustomerByEmail(m => m.Email == _currentUser.GetCurrentUser());
+            if (getcurrentcustomer == null)
             {
-                return 
+                return new Response<PaymentResponseModel>
+                {
+                    Message = "Customer not found",
+                    Status = false,
+                };
             }
+
+            var product = await _productInterface.GetById(id);
+            if (product == null)
+            {
+                return new Response<PaymentResponseModel>
+                {
+                    Message = "Product not found",
+                    Status = false,
+                };
+            }
+            var pro = new Payment
+            {
+                CustomerId = getcurrentcustomer.Id,
+                DateCreated = DateTime.Now,
+                Amount = product.Price,
+                PaymentMethod = "PayStack",
+                PaymentStatus = PaymentStatus.Pending,
+                PaymentReference = Guid.NewGuid().ToString(),
+            };
+
+            await _paymentInterface.MakePayment(pro);
+            _unitofwork.SaveChanges();
+
+            TransactionInitializeRequest request = new()
+            {
+                AmountInKobo = (int)(pro.Amount *100),
+                Email = getcurrentcustomer.Email,
+                Reference = pro.PaymentReference,
+                Currency = "NGN",
+            };
+
+            TransactionInitializeResponse response = PayStack.Transactions.Initialize(request);
+            if (!response.Status)
+            {
+                return new Response<PaymentResponseModel>
+                {
+                    Message = "Transaction Failed",
+                    Status = false,
+                };
+            }
+            pro.PaymentStatus = PaymentStatus.Complete;
+            _paymentInterface.Update(pro);
+            _unitofwork.SaveChanges();
+
+            return new Response<PaymentResponseModel>
+            {
+                Message = "Payment Successful",
+                Status = true,
+            };
         }
 
         public async Task<Response<PaymentResponseModel>> Update(PaymentRequestModel model, Guid id)
@@ -122,5 +176,87 @@ namespace WardrobeOrganizerApp.Services.Implementation
                 Status = true,
             };
         }
+
+        public async Task<Response<ICollection<PaymentResponseModel>>> GetAllCompletedPayment()
+        {
+            var payment = await _paymentInterface.GetAllCompletedPayment(p => p.PaymentStatus == PaymentStatus.Complete);
+            if (payment == null)
+            {
+                return new Response<ICollection<PaymentResponseModel>>
+                {
+                    Message = "No complete payment yet",
+                    Status = false,
+                };
+            }
+            var completedPayment = payment.Select(x => new PaymentResponseModel
+            {
+                Amount = x.Amount,
+                DateCreated = x.DateCreated,
+                CustomerId = x.CustomerId,
+                PaymentStatus = PaymentStatus.Complete,
+            }).ToList();
+
+            return new Response<ICollection<PaymentResponseModel>>
+            {
+                Message = "List of completed payment",
+                Status = true,
+                Value = completedPayment,
+            };
+        }
+
+        public async Task<Response<ICollection<PaymentResponseModel>>> GetAllFailedPayment()
+        {
+            var payments = await _paymentInterface.GetAllFailedPayment(p => p.PaymentStatus == PaymentStatus.Failed);
+            if (payments == null)
+            {
+                return new Response<ICollection<PaymentResponseModel>>
+                {
+                    Message = "No failed payment yet",
+                    Status = false,
+                };
+            }
+            var failedPayment = payments.Select(x => new PaymentResponseModel
+            {
+                Amount = x.Amount,
+                DateCreated = x.DateCreated,
+                CustomerId = x.CustomerId,
+                PaymentStatus = PaymentStatus.Failed,
+            }).ToList();
+
+            return new Response<ICollection<PaymentResponseModel>>
+            {
+                Message = "List of failed payment",
+                Status = true,
+                Value = failedPayment,
+            };
+        }
+
+        public async Task<Response<ICollection<PaymentResponseModel>>> GetAllPendingPayment()
+        {
+            var pending = await _paymentInterface.GetAllPendingPayment(p => p.PaymentStatus == PaymentStatus.Pending);
+            if (pending == null)
+            {
+                return new Response<ICollection<PaymentResponseModel>>
+                {
+                    Message = "No pending payment",
+                    Status = false,
+                };
+            }
+            var pendingPayment = pending.Select(x => new PaymentResponseModel
+            {
+                Amount = x.Amount,
+                DateCreated = x.DateCreated,
+                CustomerId = x.CustomerId,
+                PaymentStatus = PaymentStatus.Pending,
+            }).ToList();
+
+            return new Response<ICollection<PaymentResponseModel>>
+            {
+                Message = "List of pending payment",
+                Status = true,
+                Value = pendingPayment,
+            };
+        }
+
     }
 }

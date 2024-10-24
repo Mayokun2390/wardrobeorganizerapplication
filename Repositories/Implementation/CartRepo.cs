@@ -36,7 +36,7 @@ namespace WardrobeOrganizerApp.Repositories.Implementation
 
         public async Task<Cart?> GetCart(Guid id)
         {
-            var getCart = await _context.Carts .FirstOrDefaultAsync(c => c.Id == id);
+            var getCart = await _context.Carts.Include(c => c.product).FirstOrDefaultAsync(c => c.Id == id);
             return getCart;
         }
 

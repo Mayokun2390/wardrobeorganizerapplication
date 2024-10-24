@@ -44,7 +44,7 @@ namespace WardrobeOrganizerApp.Repositories.Implementation
 
         public async Task<Customer> GetCustomerById(Guid id)
         {
-            var getEmail = await _context.Customers.FirstOrDefaultAsync(c => c.Id == id);
+            var getEmail = await _context.Customers.Include(x => x.Order).FirstOrDefaultAsync(c => c.Id == id);
             return getEmail;
         }
 

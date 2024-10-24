@@ -10,8 +10,8 @@ namespace WardrobeOrganizerApp.Dtos
     {
         public Guid Id{ get; set; } 
         public DateTime DateCreated{get; set; }
-        public string Occasion {get; set; }
-        public Customer Customer { get; set; }
+        public string Occasion {get; set; } = default!;
+        public Customer Customer { get; set; } = default!;
         public string CustomerId{ get; set; } = default!;
         public string ImageUrl{ get; set; } = default!;
 
@@ -20,7 +20,7 @@ namespace WardrobeOrganizerApp.Dtos
 
     public class OutfitsRequestModel
     {
-        public string Occasion {get; set; }
+        public string Occasion {get; set; } = default!;
         public IFormFile ImageUrl{ get; set; } = default!;
         public Guid Id{ get; set; } 
 

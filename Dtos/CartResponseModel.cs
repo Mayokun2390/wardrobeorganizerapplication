@@ -18,9 +18,8 @@ namespace WardrobeOrganizerApp.Dtos
     public class CartRequestModel
     {
         public Guid Id{ get; set; } 
-
         public int Quantity{ get; set; }
-        public string ProductId{ get; set; }
+        public Guid ProductId{ get; set; }
         public string NameOfProduct{ get; set; } = default!;
         public decimal TotalPrice{ get; set; }
 

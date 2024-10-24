@@ -11,7 +11,8 @@ namespace WardrobeOrganizerApp.Entities
         public string NameOfProduct{ get; set; } = default!;
         public int Quantity{ get; set; }
         public decimal TotalPrice{ get; set; }
-        public string ProductId{ get; set; }
+        public Guid ProductId{ get; set; }
+        public Product product{ get; set; } = default!;
         public ICollection<OrderProduct> OrderProducts{get; set; } = new List<OrderProduct>();
 
     }

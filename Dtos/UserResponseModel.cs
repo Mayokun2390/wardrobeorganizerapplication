@@ -11,8 +11,9 @@ namespace WardrobeOrganizerApp.Dtos
         public Guid Id{ get; set; } 
         public string Email { get; set; } = default!;
         public string role {get; set; } = default!;
+        public string Token { get; set; } = default!;
 
-        public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
+        public ICollection<UserRole> UserRoles { get; set; } = new HashSet<UserRole>();
     }
 
 
