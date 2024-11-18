@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using WardrobeOrganizerApp.Context;
 using WardrobeOrganizerApp.Entities;
@@ -44,7 +39,7 @@ namespace WardrobeOrganizerApp.Repositories.Implementation
 
         public async Task<Customer> GetCustomerById(Guid id)
         {
-            var getEmail = await _context.Customers.Include(x => x.Order).FirstOrDefaultAsync(c => c.Id == id);
+            var getEmail = await _context.Customers.Include(x => x.Order).FirstOrDefaultAsync(c => c.CustomerId == id);
             return getEmail;
         }
 

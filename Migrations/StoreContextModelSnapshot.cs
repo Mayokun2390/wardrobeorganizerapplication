@@ -21,50 +21,48 @@ namespace WardrobeOrganizerApp.Migrations
 
             modelBuilder.Entity("WardrobeOrganizerApp.Entities.Cart", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("varchar(255)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
 
-                    b.Property<string>("NameOfProduct")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("TotalPrice")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Carts");
                 });
 
-            modelBuilder.Entity("WardrobeOrganizerApp.Entities.CartProduct", b =>
+            modelBuilder.Entity("WardrobeOrganizerApp.Entities.CartItem", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("varchar(255)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
 
-                    b.Property<string>("CartId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
+                    b.Property<Guid>("CartId")
+                        .HasColumnType("char(36)");
 
-                    b.Property<string>("ProductId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CartId");
 
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("CartProducts");
+                    b.ToTable("CartItems");
                 });
 
             modelBuilder.Entity("WardrobeOrganizerApp.Entities.ChartBot", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("varchar(255)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
 
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime(6)");
@@ -82,52 +80,17 @@ namespace WardrobeOrganizerApp.Migrations
                     b.ToTable("ChartBots");
                 });
 
-            modelBuilder.Entity("WardrobeOrganizerApp.Entities.ClothingItems", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<string>("Brand")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("Category")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CustomerId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("Season")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CustomerId");
-
-                    b.ToTable("ClothingItems");
-                });
-
             modelBuilder.Entity("WardrobeOrganizerApp.Entities.Customer", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("varchar(255)");
+                    b.Property<Guid>("CustomerId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
 
-                    b.Property<string>("ChartBotId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
+                    b.Property<Guid>("CartId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid?>("ChartBotId")
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -141,19 +104,11 @@ namespace WardrobeOrganizerApp.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("RoleName")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
+                    b.HasKey("CustomerId");
 
                     b.HasIndex("ChartBotId")
                         .IsUnique();
@@ -163,56 +118,71 @@ namespace WardrobeOrganizerApp.Migrations
 
             modelBuilder.Entity("WardrobeOrganizerApp.Entities.Order", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("varchar(255)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
 
-                    b.Property<string>("CustomerId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("char(36)");
 
-                    b.Property<DateTime>("DateTime")
+                    b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<bool>("IsApproved")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("OrderId")
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<string>("ProductId")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<int>("OrderStatus")
+                        .HasColumnType("int");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("TotalPrice")
+                    b.Property<decimal>("TotalAmount")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
 
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("WardrobeOrganizerApp.Entities.OrderItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
                     b.HasIndex("OrderId");
 
-                    b.ToTable("Orders");
+                    b.ToTable("OrderItems");
                 });
 
             modelBuilder.Entity("WardrobeOrganizerApp.Entities.OrderProduct", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("varchar(255)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
 
-                    b.Property<string>("OrderId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("char(36)");
 
-                    b.Property<string>("ProductId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("char(36)");
 
                     b.HasKey("Id");
 
@@ -223,47 +193,34 @@ namespace WardrobeOrganizerApp.Migrations
                     b.ToTable("OrderProducts");
                 });
 
-            modelBuilder.Entity("WardrobeOrganizerApp.Entities.Outfits", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<string>("CustomerId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Occasion")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CustomerId");
-
-                    b.ToTable("Outfits");
-                });
-
             modelBuilder.Entity("WardrobeOrganizerApp.Entities.Payment", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("varchar(255)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
 
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("CustomerId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("char(36)");
 
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("OrderId")
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("PaymentMethod")
                         .IsRequired()
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("PaymentReference")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("PaymentStatus")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -276,18 +233,18 @@ namespace WardrobeOrganizerApp.Migrations
 
             modelBuilder.Entity("WardrobeOrganizerApp.Entities.Product", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("varchar(255)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
 
-                    b.Property<string>("CartId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
+                    b.Property<int>("Category")
+                        .HasColumnType("int");
 
-                    b.Property<string>("ImageUrl")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Picture")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -299,15 +256,14 @@ namespace WardrobeOrganizerApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CartId");
-
                     b.ToTable("Products");
                 });
 
             modelBuilder.Entity("WardrobeOrganizerApp.Entities.Role", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("varchar(255)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -316,38 +272,68 @@ namespace WardrobeOrganizerApp.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("4ee7135b-f5b4-43a3-9f12-af1a892555d1"),
+                            Name = "admin"
+                        },
+                        new
+                        {
+                            Id = new Guid("2f20ae80-dab4-4df7-b17a-920587eff79b"),
+                            Name = "customer"
+                        });
                 });
 
             modelBuilder.Entity("WardrobeOrganizerApp.Entities.User", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("varchar(255)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Password")
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("PasswordSalt")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("UserName")
                         .IsRequired()
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("b8e9677b-9574-4a13-81ec-2215b7ed6051"),
+                            Email = "admin@gmail.com",
+                            PasswordHash = "$2a$11$hPRL20CmmRF7AqXoWSo29utoqwxUmCChIblrHQksbCIpp0aGLaCoK",
+                            PasswordSalt = "$2a$11$hPRL20CmmRF7AqXoWSo29u",
+                            UserName = "Mayokun"
+                        });
                 });
 
             modelBuilder.Entity("WardrobeOrganizerApp.Entities.UserRole", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("varchar(255)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
 
-                    b.Property<string>("RoleId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("char(36)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
 
                     b.HasKey("Id");
 
@@ -356,72 +342,60 @@ namespace WardrobeOrganizerApp.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("UserRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("9adec0f8-354d-45ac-877b-e87d661af051"),
+                            RoleId = new Guid("4ee7135b-f5b4-43a3-9f12-af1a892555d1"),
+                            UserId = new Guid("b8e9677b-9574-4a13-81ec-2215b7ed6051")
+                        });
                 });
 
-            modelBuilder.Entity("WardrobeOrganizerApp.Entities.CartProduct", b =>
+            modelBuilder.Entity("WardrobeOrganizerApp.Entities.CartItem", b =>
                 {
-                    b.HasOne("WardrobeOrganizerApp.Entities.Cart", "Cart")
-                        .WithMany("CartProduct")
+                    b.HasOne("WardrobeOrganizerApp.Entities.Cart", null)
+                        .WithMany("Items")
                         .HasForeignKey("CartId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("WardrobeOrganizerApp.Entities.Product", "Product")
-                        .WithMany("CartProduct")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Cart");
-
-                    b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("WardrobeOrganizerApp.Entities.ClothingItems", b =>
-                {
-                    b.HasOne("WardrobeOrganizerApp.Entities.Customer", "Customer")
-                        .WithMany("ClothingItems")
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("WardrobeOrganizerApp.Entities.Customer", b =>
                 {
                     b.HasOne("WardrobeOrganizerApp.Entities.ChartBot", null)
                         .WithOne("Customer")
-                        .HasForeignKey("WardrobeOrganizerApp.Entities.Customer", "ChartBotId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("WardrobeOrganizerApp.Entities.Customer", "ChartBotId");
                 });
 
             modelBuilder.Entity("WardrobeOrganizerApp.Entities.Order", b =>
                 {
-                    b.HasOne("WardrobeOrganizerApp.Entities.Customer", "Customer")
-                        .WithMany("order")
+                    b.HasOne("WardrobeOrganizerApp.Entities.Customer", null)
+                        .WithMany("Order")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
 
+            modelBuilder.Entity("WardrobeOrganizerApp.Entities.OrderItem", b =>
+                {
                     b.HasOne("WardrobeOrganizerApp.Entities.Order", null)
-                        .WithMany("Orders")
-                        .HasForeignKey("OrderId");
-
-                    b.Navigation("Customer");
+                        .WithMany("Items")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("WardrobeOrganizerApp.Entities.OrderProduct", b =>
                 {
                     b.HasOne("WardrobeOrganizerApp.Entities.Order", "Order")
-                        .WithMany("OrderProducts")
+                        .WithMany()
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("WardrobeOrganizerApp.Entities.Product", "Product")
-                        .WithMany("OrderProducts")
+                        .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -429,17 +403,6 @@ namespace WardrobeOrganizerApp.Migrations
                     b.Navigation("Order");
 
                     b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("WardrobeOrganizerApp.Entities.Outfits", b =>
-                {
-                    b.HasOne("WardrobeOrganizerApp.Entities.Customer", "Customer")
-                        .WithMany("Outfits")
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("WardrobeOrganizerApp.Entities.Payment", b =>
@@ -459,17 +422,6 @@ namespace WardrobeOrganizerApp.Migrations
                     b.Navigation("Customer");
 
                     b.Navigation("Order");
-                });
-
-            modelBuilder.Entity("WardrobeOrganizerApp.Entities.Product", b =>
-                {
-                    b.HasOne("WardrobeOrganizerApp.Entities.Cart", "cart")
-                        .WithMany()
-                        .HasForeignKey("CartId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("cart");
                 });
 
             modelBuilder.Entity("WardrobeOrganizerApp.Entities.UserRole", b =>
@@ -493,7 +445,7 @@ namespace WardrobeOrganizerApp.Migrations
 
             modelBuilder.Entity("WardrobeOrganizerApp.Entities.Cart", b =>
                 {
-                    b.Navigation("CartProduct");
+                    b.Navigation("Items");
                 });
 
             modelBuilder.Entity("WardrobeOrganizerApp.Entities.ChartBot", b =>
@@ -504,27 +456,14 @@ namespace WardrobeOrganizerApp.Migrations
 
             modelBuilder.Entity("WardrobeOrganizerApp.Entities.Customer", b =>
                 {
-                    b.Navigation("ClothingItems");
-
-                    b.Navigation("Outfits");
+                    b.Navigation("Order");
 
                     b.Navigation("Payment");
-
-                    b.Navigation("order");
                 });
 
             modelBuilder.Entity("WardrobeOrganizerApp.Entities.Order", b =>
                 {
-                    b.Navigation("OrderProducts");
-
-                    b.Navigation("Orders");
-                });
-
-            modelBuilder.Entity("WardrobeOrganizerApp.Entities.Product", b =>
-                {
-                    b.Navigation("CartProduct");
-
-                    b.Navigation("OrderProducts");
+                    b.Navigation("Items");
                 });
 
             modelBuilder.Entity("WardrobeOrganizerApp.Entities.Role", b =>

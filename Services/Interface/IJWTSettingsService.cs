@@ -9,6 +9,7 @@ namespace WardrobeOrganizerApp.Services.Interface
     public interface IJWTSettingsService
     {
         string GenerateToken(User user);
+        Task<User?> GetUserById(Guid id);
 
     }
 }

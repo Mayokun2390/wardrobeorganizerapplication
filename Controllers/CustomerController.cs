@@ -15,18 +15,16 @@ namespace WardrobeOrganizerApp.Controllers
     {
         private readonly ICustomerService _customerService;
         private readonly IProductService _productService;
-        private readonly IOutfitsService _outfitsService;
-        private readonly IClothingItemService _clothingitemService;
+
+
         private readonly IOrderService _orderService;
         private readonly IPaymentService _paymentService;
         private readonly IUserService _userService;
         private readonly ICartService _cartService;
-        public CustomerController(ICustomerService customerService, IProductService productService, IOutfitsService outfitsService, IClothingItemService clothingitemService, IOrderService orderService, IPaymentService paymentService, IUserService userService, ICartService cartService) 
+        public CustomerController(ICustomerService customerService, IProductService productService, IOrderService orderService, IPaymentService paymentService, IUserService userService, ICartService cartService) 
         {
             _customerService = customerService;
             _productService = productService;
-            _outfitsService = outfitsService;
-            _clothingitemService = clothingitemService;
             _orderService = orderService;
             _paymentService = paymentService;
             _userService = userService;
@@ -38,45 +36,13 @@ namespace WardrobeOrganizerApp.Controllers
         public async Task<IActionResult> RegisterCustomer(CustomerRequestModel request)
         {
             var customer = await _customerService.CreateCustomer(request);
-            if (!customer.Status == false)
+            if (!customer.Status)
             {
                 return BadRequest(customer.Message);
             }
             return Ok(customer.Message);
         }
-        [HttpPost("Login")]
-
-        public async Task<IActionResult> Login(LoginRequestModel model)
-        {
-            var user = await _userService.Login(model);
-            if(!user.Status == false)
-            {
-                return BadRequest(user.Message);
-            }
-            return Ok(user.Message);
-        }
-        [HttpGet("{id}, viewavailableorder")]
-        public async Task<IActionResult> ViewAvailableProduct(ProductResponseModel model)
-        {
-            var product = await _productService.GetAllProducts();
-            if (!product.Status == false)
-            {
-                return BadRequest(product.Message);
-            }
-            return Ok(product.Message);
-        }
-
-        [HttpGet("{id}, viewalloutfits")]
-        private async Task<IActionResult> ViewAllOutfits(OutfitsResponseModel model)
-        {
-            var outfit = await _outfitsService.GetAllOutfits();
-            if (!outfit.Status == false)
-            {
-                return BadRequest(outfit.Message);
-            }
-            return Ok(outfit.Message);
-        }
-
+        
         [HttpPut]
         public async Task<IActionResult> UpdateCustomerProfile(CustomerRequestModel model, Guid id)
         {
@@ -86,50 +52,6 @@ namespace WardrobeOrganizerApp.Controllers
                return BadRequest(update.Message); 
             }
             return Ok(update.Message);
-        }
-
-        [HttpPost("MakeOrder")]
-        public async Task<IActionResult> MakeOrder(OrderRequestModel model)
-        {
-            var order = await _orderService.MakeOrder(model);
-            if (!order.Status == false)
-            {
-                return BadRequest(order.Message);
-            }
-            return Ok(order.Message);
-        }
-
-        [HttpPost("MakePayment")]
-        public async Task<IActionResult> MakePayment(PaymentRequestModel model, Guid id)
-        {
-            var payment = await _paymentService.MakePayment(id);
-            if(!payment.Status == false)
-            {
-                return BadRequest(payment.Message);
-            }
-            return Ok(payment.Message);
-        }
-
-        [HttpGet("{id}, viewallclothingitems")]
-        public async Task<IActionResult> ViewAllClothingItems()
-        {
-            var clothing = await _clothingitemService.GetAllClothings();
-            if (!clothing.Status == false)
-            {
-                return BadRequest(clothing.Message);
-            }
-            return Ok(clothing.Message);
-        }
-
-        [HttpGet("{id}, AddToCart")]
-        public async Task<IActionResult> AddToCart(CartRequestModel model)
-        {
-            var cart = await _cartService.AddToCart(model);
-            if (!cart.Status == false)
-            {
-                return BadRequest(cart.Message);
-            }
-            return Ok(cart.Message);
         }
 
         [HttpDelete]
@@ -142,5 +64,29 @@ namespace WardrobeOrganizerApp.Controllers
             }
             return Ok(delete.Message);
         }
+
+
+        [HttpGet("{email}, getcustomer")]
+        public async Task<IActionResult> GetCustomer(string  email)
+        {
+            var get = await _customerService.Get(email);
+            if (get == null)
+            {
+                return BadRequest(get.Message);
+            }
+            return Ok(get.Value);
+        }
+
+        [HttpGet("{id}, getcustomerbyid")]
+        public async Task<IActionResult> GetCustomerById(Guid  id)
+        {
+            var getby = await _customerService.GetById(id);
+            if (getby == null)
+            {
+                return BadRequest(getby.Message);
+            }
+            return Ok(getby.Value);
+        }
+
     }
 }

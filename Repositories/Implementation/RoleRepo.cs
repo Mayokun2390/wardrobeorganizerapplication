@@ -47,6 +47,12 @@ namespace WardrobeOrganizerApp.Repositories.Implementation
             return role;
         }
 
+        public async Task<Role> GetRoleByName(string name)
+        {
+            var getname = await _context.Roles.FirstOrDefaultAsync(n => n.Name == name);
+            return getname;
+        }
+
         public Role Update(Role role)
         {
             _context.Roles.Update(role);

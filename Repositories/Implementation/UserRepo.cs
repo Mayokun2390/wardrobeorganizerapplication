@@ -37,8 +37,14 @@ namespace WardrobeOrganizerApp.Repositories.Implementation
 
         public async Task<User> GetUserAsync(Expression<Func<User, bool>> predicate)
         {
-            var getUser = await _context.Users.FirstOrDefaultAsync(predicate);
+            var getUser = await _context.Users.Include(x => x.UserRoles).ThenInclude(x => x.Role).FirstOrDefaultAsync(predicate);
             return getUser;
+        }
+
+        public async Task<User> GetUserById(Guid id)
+        {
+            var getuser = await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
+            return getuser;
         }
 
         public User Update(User user)

@@ -9,16 +9,15 @@ namespace WardrobeOrganizerApp.Dtos
 {
     public class OrderResponseModel
     {
-        public Guid Id{ get; set; } 
-        public DateTime DateTime{ get; set; }
-        public decimal TotalPrice{ get; set; }
+        public Guid Id{ get; set; } = Guid.NewGuid();
+        public DateTime OrderDate{ get; set; }
+        public decimal TotalAmount{ get; set; }
         public string CustomerId{ get; set; } = default!;
         public string ProductId{ get; set; } = default!;
-        public Status Status { get; set; }
+        public OrderStatus OrderStatus { get; set; } = default!;
         public Customer Customer{ get; set; } = default!;
         public ICollection<OrderProduct> OrderProducts{ get; set; } = new HashSet<OrderProduct>();
         public int Quantity{ get; set; }
-        public bool IsApproved {get; set; }
         public ICollection<Order> Orders { get; set; } = new HashSet<Order>();
     }
 
@@ -26,7 +25,8 @@ namespace WardrobeOrganizerApp.Dtos
     public class OrderRequestModel
     {
         public int Quantity{ get; set; }
-        public Guid Id{ get; set; } 
-
+        public Guid CustomerId {get; set; }
+        public Guid UserId {get; set; }
+        public ICollection<OrderItem> OrderItems {get; set;} = new HashSet<OrderItem>();
     }
 }

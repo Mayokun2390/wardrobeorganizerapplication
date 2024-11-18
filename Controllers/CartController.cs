@@ -22,7 +22,7 @@ namespace WardrobeOrganizerApp.Controllers
         [HttpDelete("Delete")]
         public async  Task<IActionResult> Delete(Guid id)
         {
-            var delete = await _cartService.Delete(id);
+            var delete = await _cartService.DeleteCartByUserId(id);
             if (!delete.Status == false)
             {
                 return BadRequest(delete.Message);
@@ -31,9 +31,9 @@ namespace WardrobeOrganizerApp.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update(CartRequestModel model)
+        public async Task<IActionResult> Update(CreateOrderRequest model, Guid id)
         {
-            var update = await _cartService.Update(model);
+            var update = await _cartService.Update(model, id);
             if (!update.Status == false)
             {
                 return BadRequest(update.Message);
@@ -44,30 +44,30 @@ namespace WardrobeOrganizerApp.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllCart()
         {
-            var getall = await _cartService.GetAll();
-            if (!getall.Status == false)
+            var getall = await _cartService.GetAllCarts();
+            if (getall == null)
             {
                 return BadRequest(getall.Message);
             }
-            return Ok(getall.Message);
+            return Ok(getall.Value);
         }
 
-        [HttpPost("Add-Cart")]
-        public async Task<IActionResult> AddToCart(CartRequestModel model)
-        {
-            var add = await _cartService.AddToCart(model);
-            if (!add.Status == false)
-            {
-                return BadRequest(add.Message);
-            }
-            return Ok(add.Message);
-        }
+        // [HttpPost("Add-Cart")]
+        // public async Task<IActionResult> AddToCart(CreateOrderRequest model)
+        // {
+        //     var add = await _cartService.AddToCart(model);
+        //     if (!add.Status)
+        //     {
+        //         return BadRequest(add.Message);
+        //     }
+        //     return Ok(add.Message);
+        // }
 
         [HttpPost("Create_Cart")]
-        public async Task<IActionResult> CreateCart(CartRequestModel model)
+        public async Task<IActionResult> CreateCart(CreateOrderRequest model)
         {
-            var create = await _cartService.Create(model);
-            if (!create.Status == false)
+            var create = await _cartService.AddToCart(model);
+            if (!create.Status)
             {
                 return BadRequest(create.Message);
             }

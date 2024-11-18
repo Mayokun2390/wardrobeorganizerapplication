@@ -45,11 +45,11 @@ namespace WardrobeOrganizerApp.Controllers
         public async Task<IActionResult> GetPayment(Guid id)
         {
             var get = await _paymentService.Get(id);
-            if (!get.Status == false)
+            if (get == null)
             {
                 return BadRequest(get.Message);
             }
-            return Ok(get.Message);
+            return Ok(get.Value);
         }
 
         [HttpPost]
@@ -67,33 +67,33 @@ namespace WardrobeOrganizerApp.Controllers
         public async Task<IActionResult> GetAllPaymnet()
         {
            var getall = await _paymentService.GetAllPayment();
-           if (!getall.Status == false)
+           if (getall == null)
            {
                 return BadRequest(getall.Message);
            } 
-           return Ok(getall.Message);
+           return Ok(getall.Value);
         }
 
         [HttpGet("{id}, getallcompletedpayment")]
         public async Task<IActionResult> GetAllCompletedPayment()
         {
            var getallcompletepay = await _paymentService.GetAllCompletedPayment();
-           if (!getallcompletepay.Status == false)
+           if (getallcompletepay == null)
            {
                 return BadRequest(getallcompletepay.Message);
            } 
-           return Ok(getallcompletepay.Message);
+           return Ok(getallcompletepay.Value);
         }
 
         [HttpGet("{id}, getallfailedpayment")]
         public async Task<IActionResult> GetAllfailedPayment()
         {
            var getallfailedpay = await _paymentService.GetAllFailedPayment();
-           if (!getallfailedpay.Status == false)
+           if (getallfailedpay == null)
            {
                 return BadRequest(getallfailedpay.Message);
            } 
-           return Ok(getallfailedpay.Message);
+           return Ok(getallfailedpay.Value);
         }
 
 
@@ -101,11 +101,11 @@ namespace WardrobeOrganizerApp.Controllers
         public async Task<IActionResult> GetAllpendingPayment()
         {
            var getallpendingpay = await _paymentService.GetAllPendingPayment();
-           if (!getallpendingpay.Status == false)
+           if (getallpendingpay == null)
            {
                 return BadRequest(getallpendingpay.Message);
            } 
-           return Ok(getallpendingpay.Message);
+           return Ok(getallpendingpay.Value);
         }
     }
 }

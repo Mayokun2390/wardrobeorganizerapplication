@@ -7,7 +7,7 @@ namespace WardrobeOrganizerApp.Entities
 {
     public class ChartBot
     {
-        public Guid Id{ get; set; } 
+        public Guid Id{ get; set; } = Guid.NewGuid();
         public string MessageText {get; set;} = default!;
         public string ResponseText {get; set;} = default!;
         public DateTime DateCreated{get; set; }

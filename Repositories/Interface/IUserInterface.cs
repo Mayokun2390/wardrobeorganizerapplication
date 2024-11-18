@@ -11,6 +11,7 @@ namespace WardrobeOrganizerApp.Repositories.Interface
     {
         Task<User> CreateUser(User user);
         Task<User> GetUserAsync(Expression<Func<User, bool>> predicate);
+        Task<User> GetUserById(Guid id);
         Task<ICollection<User>> GetAllUsers();
         bool Delete(User user);
         User Update(User user);

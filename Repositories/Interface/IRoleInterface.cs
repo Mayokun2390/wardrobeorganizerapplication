@@ -11,6 +11,7 @@ namespace WardrobeOrganizerApp.Repositories.Interface
     {
         Task<Role> CreateRole(Role role);
         Task<Role> GetRoleById(Guid id);
+        Task<Role> GetRoleByName(string name);
         Task<ICollection<Role>> GetAllRoles();
         bool Delete(Role role);
         Role Update (Role role);

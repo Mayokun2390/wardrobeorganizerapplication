@@ -2,7 +2,8 @@ namespace WardrobeOrganizerApp.Enums
 {
     public enum OrderStatus
     {
-        IsApproded = 1,
+        IsApproved,
         NotApproved,
+        Pending,
     }
 }

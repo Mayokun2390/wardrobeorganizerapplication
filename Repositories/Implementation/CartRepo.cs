@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using WardrobeOrganizerApp.Context;
@@ -16,34 +17,43 @@ namespace WardrobeOrganizerApp.Repositories.Implementation
         {
             _context = context;
         }
-        public async Task<Cart> Create(Cart cart)
+
+        public async Task AddCart(Cart cart)
         {
             await _context.Carts.AddAsync(cart);
-            return cart;
+            await _context.SaveChangesAsync();
         }
 
-        public bool Delete(Cart cart)
+        public async Task DeleteCartItems(Guid cartId)
         {
-            _context.Carts.Remove(cart);
-            return true;
+            var cart = await _context.Carts
+            .Include(c => c.Items)
+            .FirstOrDefaultAsync(c => c.Id == cartId);
+
+        if (cart != null)
+        {
+            _context.CartItems.RemoveRange(cart.Items);
+            await _context.SaveChangesAsync();
+        }
         }
 
         public async Task<ICollection<Cart>> GetAllCarts()
         {
             var getCarts = await _context.Carts.ToListAsync();
-            return getCarts;
+            return getCarts; 
         }
 
-        public async Task<Cart?> GetCart(Guid id)
+        public async Task<Cart?> GetCartByUserId(Guid userId)
         {
-            var getCart = await _context.Carts.Include(c => c.product).FirstOrDefaultAsync(c => c.Id == id);
-            return getCart;
+           return await _context.Carts
+            .Include(c => c.Items)
+            .FirstOrDefaultAsync(c => c.UserId == userId);
         }
 
-        public Cart Update(Cart cart)
+        public async Task UpdateCart(Cart cart)
         {
-           _context.Carts.Update(cart);
-            return cart;
+            _context.Carts.Update(cart);
+            await _context.SaveChangesAsync();
         }
     }
 }

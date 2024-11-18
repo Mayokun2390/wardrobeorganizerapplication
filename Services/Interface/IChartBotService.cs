@@ -10,7 +10,7 @@ namespace WardrobeOrganizerApp.Services.Interface
     {
         Task<Response<ChartBotResponseModel>> CreateChart (ChartBotRequestModel model);
         Task<Response<ICollection<ChartBotResponseModel>>> GetAll ();
-        Task<Response<ChartBotResponseModel>> Update (ChartBotRequestModel model);
+        Task<Response<ChartBotResponseModel>> Update (ChartBotRequestModel model, Guid id);
         Task<Response<ChartBotResponseModel>> Delete (Guid id);
     }
 }

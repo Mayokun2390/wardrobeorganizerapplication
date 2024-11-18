@@ -1,5 +1,6 @@
 C:\Users\HALIYAH BELLO\Desktop\WardrobeOrganizerApp\bin\Debug\net8.0\appsettings.Development.json
 C:\Users\HALIYAH BELLO\Desktop\WardrobeOrganizerApp\bin\Debug\net8.0\appsettings.json
+C:\Users\HALIYAH BELLO\Desktop\WardrobeOrganizerApp\bin\Debug\net8.0\WardrobeOrganizerApp.staticwebassets.runtime.json
 C:\Users\HALIYAH BELLO\Desktop\WardrobeOrganizerApp\bin\Debug\net8.0\WardrobeOrganizerApp.exe
 C:\Users\HALIYAH BELLO\Desktop\WardrobeOrganizerApp\bin\Debug\net8.0\WardrobeOrganizerApp.deps.json
 C:\Users\HALIYAH BELLO\Desktop\WardrobeOrganizerApp\bin\Debug\net8.0\WardrobeOrganizerApp.runtimeconfig.json

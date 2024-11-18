@@ -8,11 +8,10 @@ namespace WardrobeOrganizerApp.Dtos
 {
     public class UserResponseModel
     {
-        public Guid Id{ get; set; } 
+        public Guid Id{ get; set; } = Guid.NewGuid();
         public string Email { get; set; } = default!;
-        public string role {get; set; } = default!;
-        public string Token { get; set; } = default!;
-
+        public string Token { get; set; } 
+        public ICollection<string> Roles { get; set;} = new List<string>();
         public ICollection<UserRole> UserRoles { get; set; } = new HashSet<UserRole>();
     }
 

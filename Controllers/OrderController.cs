@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WardrobeOrganizerApp.Dtos;
 using WardrobeOrganizerApp.Services.Interface;
@@ -23,7 +24,7 @@ namespace WardrobeOrganizerApp.Controllers
         public async Task<IActionResult> ApprovedOrder(Guid id)
         {
             var order = await _orderService.ApproveOrder(id);
-            if (!order.Status == false)
+            if (!order.Status)
             {
                 return BadRequest(order.Message);
 
@@ -47,11 +48,11 @@ namespace WardrobeOrganizerApp.Controllers
         public async Task<IActionResult> GetAllApprovedOrder()
         {
             var orders = await _orderService.GetAllApprovedOrders();
-            if (!orders.Status == false)
+            if (orders == null)
             {
                 return BadRequest(orders.Message);
             }
-            return Ok(orders.Message);
+            return Ok(orders.Value);
         }
 
         [HttpGet("{id}, getalldisapproveorder")]
@@ -59,11 +60,11 @@ namespace WardrobeOrganizerApp.Controllers
         public async Task<IActionResult> GetAllDisApproveOrder()
         {
             var disorder = await _orderService.GetAllDisApprovedOrders();
-            if (!disorder.Status == false)
+            if (disorder == null)
             {
                 return BadRequest(disorder.Message);
             }
-            return Ok(disorder.Message);
+            return Ok(disorder.Value);
         }
 
         [HttpGet("{id}, getapprovedorder")]
@@ -71,22 +72,22 @@ namespace WardrobeOrganizerApp.Controllers
         public async Task<IActionResult> GetApproveOrder(Guid id)
         {
             var getapprove = await _orderService.GetApprovedOrder(id);
-            if (!getapprove.Status)
+            if (getapprove == null)
             {
                 return BadRequest(getapprove.Message);
             }
-            return Ok(getapprove.Message);
+            return Ok(getapprove.Value);
         }
         [HttpGet("{id}, GetDisapproveOrder")]
 
         public async Task<IActionResult> GetDisapproveOrder(Guid id)
         {
             var disapprove = await _orderService.GetApprovedOrder(id);
-            if (!disapprove.Status == false)
+            if (disapprove == null)
             {
                 return BadRequest(disapprove.Message);
             }
-            return Ok(disapprove.Message);
+            return Ok(disapprove.Value);
         }
 
         [HttpDelete]
@@ -115,22 +116,35 @@ namespace WardrobeOrganizerApp.Controllers
         public async Task<IActionResult> GetOrder(Guid id)
         {
             var get = await _orderService.GetOrder(id);
-            if (!get.Status == false)
+            if (get == null)
             {
                 return BadRequest(get.Message);
             }
-            return Ok(get.Message);
+            return Ok(get.Value);
         }
 
-        [HttpPost]
+        // [Authorize ("customer")]
+        [HttpPost ]
         public async Task<IActionResult> MakeOrder(OrderRequestModel model)
         {
-            var makeorder = await _orderService.MakeOrder(model);
-            if (!makeorder.Status == false)
+            var makeorder = await _orderService.CreateOrder(model);
+            if (!makeorder.Status)
             {
                 return BadRequest(makeorder.Message);
             }
             return Ok(makeorder.Message);
+        }
+
+
+        [HttpGet("{id}, getdeliveredorder")]
+        public async Task<IActionResult> GetDeliveredOrder(Guid id)
+        {
+            var get = await _orderService.IsDelivered(id);
+            if (get == null)
+            {
+                return BadRequest(get.Message);
+            }
+            return Ok(get.Value);
         }
     }
 }

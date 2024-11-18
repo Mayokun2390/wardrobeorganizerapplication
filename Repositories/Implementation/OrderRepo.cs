@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 // using Mysqlx.Crud;
 using WardrobeOrganizerApp.Context;
 using WardrobeOrganizerApp.Entities;
+using WardrobeOrganizerApp.Enums;
 using WardrobeOrganizerApp.Repositories.Interface;
 
 namespace WardrobeOrganizerApp.Repositories.Implementation
@@ -22,25 +23,25 @@ namespace WardrobeOrganizerApp.Repositories.Implementation
 
         public async Task<Order> ApprovedOrder(Guid id)
         {
-            var status = await _context.Orders.Where(x => x.IsApproved== true).FirstOrDefaultAsync(x => x.Id == id);
+            var status = await _context.Orders.Where(x => x.OrderStatus == OrderStatus.IsApproved).FirstOrDefaultAsync(x => x.Id == id);
             return status;
         }
 
-        public bool Delete(Order orders)
+        public bool Delete(Order order)
         {
-           _context.Orders.Remove(orders);
-           return true;
+            _context.Orders.Remove(order);
+            return true;
         }
 
         public async Task<ICollection<Order>> GetAllApprovedOrder(Expression<Func<Order, bool>> predicate)
         {
-            var getApprovedOrders = await _context.Orders.Include(x => x.Customer).Where(predicate).ToListAsync();
+            var getApprovedOrders = await _context.Orders.Where(predicate).ToListAsync();
             return getApprovedOrders;
         }
 
         public async Task<ICollection<Order>> GetAllDisApprovedOrder(Expression<Func<Order, bool>> predicate)
         {
-            var getDisapprovedOrder = await _context.Orders.Include(x => x.Customer).Where(predicate).ToListAsync();
+            var getDisapprovedOrder = await _context.Orders.Where(predicate).ToListAsync();
             return getDisapprovedOrder;
         }
 
@@ -64,7 +65,7 @@ namespace WardrobeOrganizerApp.Repositories.Implementation
 
         public async Task<Order> NotApprovedOrder(Guid id)
         {
-            var status = await _context.Orders.Where(x => x.IsApproved == false).FirstOrDefaultAsync(x => x.Id == id);
+            var status = await _context.Orders.Where(x => x.OrderStatus == OrderStatus.Pending).FirstOrDefaultAsync(x => x.Id == id);
             return status;
         }
 

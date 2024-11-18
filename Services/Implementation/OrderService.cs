@@ -18,7 +18,9 @@ namespace WardrobeOrganizerApp.Services.Implementation
         private readonly ICustomerInterface _customerInterface;
         private readonly ICurrentUser _currentUser;
         private readonly IPaymentInterface _paymentInterface;
-        public OrderService(IOrderInterface orderInterface, IUnitOfWork unitofwork, IProductInterface productInterface, ICustomerInterface customerInterface, ICurrentUser currentUser, IPaymentInterface paymentInterface)
+        private readonly IUserInterface _userInterface;
+        private readonly ICartInterface _cartInterface;
+        public OrderService(IOrderInterface orderInterface, IUnitOfWork unitofwork, IProductInterface productInterface, ICustomerInterface customerInterface, ICurrentUser currentUser, IPaymentInterface paymentInterface, IUserInterface userInterface, ICartInterface cartInterface)
         {
             _orderInterface = orderInterface;
             _unitofwork = unitofwork;
@@ -26,10 +28,22 @@ namespace WardrobeOrganizerApp.Services.Implementation
             _customerInterface = customerInterface;
             _currentUser = currentUser;
             _paymentInterface = paymentInterface;
+            _userInterface = userInterface;
+            _cartInterface = cartInterface;
         }
+
         public async Task<Response<OrderResponseModel>> ApproveOrder(Guid id)
         {
-            var order = await _orderInterface.GetOrderById(id);
+            var user = await _customerInterface.GetCustomerByEmail(a => a.Email == _currentUser.GetCurrentUser());
+            if(user == null)
+            {
+                return new Response<OrderResponseModel>
+                {
+                    Message = " This user is not authorized to perform this function",
+                    Status = false,
+                };
+            }
+            var order = await _orderInterface.ApprovedOrder(id);
             if (order == null)
             {
                 return new Response<OrderResponseModel>
@@ -39,14 +53,53 @@ namespace WardrobeOrganizerApp.Services.Implementation
                 };
             }
 
-            order.IsApproved = true;    
-            order.Status = Status.IsDelivered;
+            order.OrderStatus = OrderStatus.IsApproved;
             _orderInterface.Update(order);
             _unitofwork.SaveChanges();
 
             return new Response<OrderResponseModel>
             {
                 Message = "Order Approved",
+                Status = true,
+            };
+        }
+
+        public async Task<Response<OrderResponseModel>> CreateOrder(OrderRequestModel model)
+        {
+            var user = await _customerInterface.GetCustomerByEmail(m => m.Email == _currentUser.GetCurrentUser());
+            if(user == null)
+            {
+                return new Response<OrderResponseModel>
+                {
+                    Message = "User not found",
+                    Status = false,
+                };
+            }
+            var cart = await _cartInterface.GetCartByUserId(model.UserId);
+            if (cart == null || !cart.Items.Any())
+                throw new Exception("Cart is empty");
+
+            var order = new Order
+            {
+                UserId = model.UserId,
+                CustomerId = user.CustomerId,
+                Quantity = model.Quantity,
+                TotalAmount = cart.Items.Sum(i => i.Price * i.Quantity),
+                OrderDate = DateTime.UtcNow,
+                OrderStatus = OrderStatus.Pending,
+                Items = cart.Items.Select(i => new OrderItem
+                {
+                    ProductId = i.ProductId,
+                    Quantity = i.Quantity,
+                    Price = i.Price,
+                }).ToList()
+            };
+
+            await _orderInterface.MakeOrder(order);
+            _unitofwork.SaveChanges();
+            return new Response<OrderResponseModel>
+            {
+                Message = "Order made Successfully",
                 Status = true,
             };
         }
@@ -73,7 +126,7 @@ namespace WardrobeOrganizerApp.Services.Implementation
 
         public async Task<Response<OrderResponseModel>> DisApproved(Guid id)
         {
-            var disapprove = await _orderInterface.GetOrderById(id);
+            var disapprove = await _orderInterface.NotApprovedOrder(id);
             if (disapprove == null)
             {
                 return new Response<OrderResponseModel>
@@ -83,8 +136,7 @@ namespace WardrobeOrganizerApp.Services.Implementation
                 };
             }
 
-            disapprove.IsApproved = false;
-            disapprove.Status = Status.Pending;
+            disapprove.OrderStatus = OrderStatus.NotApproved;
             _orderInterface.Update(disapprove);
             _unitofwork.SaveChanges();
 
@@ -97,12 +149,12 @@ namespace WardrobeOrganizerApp.Services.Implementation
 
         public async Task<Response<ICollection<OrderResponseModel>>> GetAllApprovedOrders()
         {
-            var getorders = await _orderInterface.GetAllApprovedOrder(x => x.IsApproved == true);
+            var getorders = await _orderInterface.GetAllApprovedOrder(x => x.OrderStatus == OrderStatus.IsApproved);
             var getApprovedOrders = getorders.Select(x => new OrderResponseModel{  
-            DateTime = x.DateTime,
-            TotalPrice = x.TotalPrice,
+            OrderDate = x.OrderDate,
+            TotalAmount = x.TotalAmount,
             Quantity = x.Quantity,
-            Status = Status.IsDelivered,
+            OrderStatus = x.OrderStatus,
             }).ToList();
 
             return new Response<ICollection<OrderResponseModel>>
@@ -115,12 +167,12 @@ namespace WardrobeOrganizerApp.Services.Implementation
 
         public async Task<Response<ICollection<OrderResponseModel>>> GetAllDisApprovedOrders()
         {
-            var getOrders = await _orderInterface.GetAllDisApprovedOrder(x => x.IsApproved == false);
+            var getOrders = await _orderInterface.GetAllDisApprovedOrder(x => x.OrderStatus == OrderStatus.NotApproved);
             var getDisapprovedOrders = getOrders.Select(x => new OrderResponseModel{
-                DateTime = x.DateTime,
-                TotalPrice = x.TotalPrice,
+                OrderDate = x.OrderDate,
+                TotalAmount = x.TotalAmount,
                 Quantity = x.Quantity,
-                Status = Status.Pending,
+                OrderStatus = x.OrderStatus,
             }).ToList();
 
             return new Response<ICollection<OrderResponseModel>>
@@ -135,10 +187,10 @@ namespace WardrobeOrganizerApp.Services.Implementation
         {
             var orders = await _orderInterface.GetAllOrder();
             var getOrders = orders.Select(x => new OrderResponseModel{  
-                DateTime = x.DateTime,
-                TotalPrice = x.TotalPrice,
+                OrderDate = x.OrderDate,
+                TotalAmount = x.TotalAmount,
                 Quantity = x.Quantity,
-                Status = Status.IsDelivered,
+                OrderStatus = x.OrderStatus,
             }).ToList();
 
             return new Response<ICollection<OrderResponseModel>>
@@ -162,10 +214,10 @@ namespace WardrobeOrganizerApp.Services.Implementation
             }
             var getOrder = new OrderResponseModel
             {
-                TotalPrice = getApprove.TotalPrice,
+                TotalAmount = getApprove.TotalAmount,
                 Quantity = getApprove.Quantity,
-                DateTime = getApprove.DateTime,
-                Status = Status.IsDelivered,
+                OrderDate = getApprove.OrderDate,
+                OrderStatus = getApprove.OrderStatus,
             };
             return new Response<OrderResponseModel>
             {
@@ -188,10 +240,10 @@ namespace WardrobeOrganizerApp.Services.Implementation
             }
             var getOrder = new OrderResponseModel
             {
-                TotalPrice = getDisapprove.TotalPrice,
+                TotalAmount = getDisapprove.TotalAmount,
                 Quantity = getDisapprove.Quantity,
-                DateTime = getDisapprove.DateTime,
-                Status = Status.Pending
+                OrderDate = getDisapprove.OrderDate,
+                OrderStatus = getDisapprove.OrderStatus,
             };
             return new Response<OrderResponseModel>
             {
@@ -213,10 +265,9 @@ namespace WardrobeOrganizerApp.Services.Implementation
             }
             var getOrder = new OrderResponseModel
             {
-                TotalPrice = order.TotalPrice,
+                TotalAmount = order.TotalAmount,
                 Quantity = order.Quantity,
-                DateTime = order.DateTime,
-                Status = Status.IsDelivered,
+                OrderStatus = order.OrderStatus,
             };
             return new Response<OrderResponseModel>
             {
@@ -224,53 +275,31 @@ namespace WardrobeOrganizerApp.Services.Implementation
                 Status = true,
                 Value = getOrder,
             };
+
+            
         }
 
-        public async Task<Response<OrderResponseModel>> MakeOrder(OrderRequestModel model)
+        public async Task<Response<OrderResponseModel>> IsDelivered(Guid id)
         {
-            var customer = await _customerInterface.GetCustomerByEmail(m => m.Email == _currentUser.GetCurrentUser());
-            var product = await _productInterface.GetById(model.Id);
-
-            if (product == null)
+            var CheckIsApproved = await _orderInterface.GetOrderById(id);
+            if (CheckIsApproved == null)
             {
                 return new Response<OrderResponseModel>
                 {
-                    Message = "Order not found",
-                    Status = false,
+                    Message = "ApprovedOrder not found",
+                    Status =  false,
                 };
             }
-
-            decimal totalPrice = product.Price * model.Quantity;
-            if (model.Quantity < model.Quantity)
+            var getDelivered = new OrderResponseModel
             {
-                return new Response<OrderResponseModel>
-                {
-                    Message = "Quantity must be greater than 0",
-                    Status = false,
-                };
-            }
-
-            product.Quantity -= model.Quantity;
-        
-            _productInterface.Update(product);
-
-            var orders = new Order
-            {
-                DateTime = DateTime.UtcNow,
-                Quantity = product.Quantity,
-                ProductId = product.Id,
-                CustomerId = customer.Id,
+                TotalAmount = CheckIsApproved.TotalAmount,
+                Quantity = CheckIsApproved.Quantity,
+                OrderDate = CheckIsApproved.OrderDate,
+                OrderStatus = OrderStatus.IsApproved,
             };
-            await _orderInterface.MakeOrder(orders);
-            var orderProduct = new OrderProduct
-            {
-                OrderId = orders.Id,
-                ProductId = product.Id,
-            };
-            product.OrderProducts.Add(orderProduct);
             return new Response<OrderResponseModel>
             {
-                Message = "Order created Successfully",
+                Message = "Order Delivered",
                 Status = true,
             };
         }

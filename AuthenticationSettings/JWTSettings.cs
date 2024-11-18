@@ -7,9 +7,9 @@ namespace WardrobeOrganizerApp.AuthenticationSettings
 {
     public class JWTSettings
     {
-        public string SecurityKey { get; set; } = default!;
+        public string SecurityKey { get; set; } 
         public string Isseur { get; set; } = default!;
         public string Audience { get; set; } = default!;
-        public double ExpiratinTime {get; set;}
+        public double ExpirationTime {get; set;}
     }
 }

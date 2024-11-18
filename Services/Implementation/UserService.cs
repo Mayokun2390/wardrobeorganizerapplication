@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using WardrobeOrganizerApp.Dtos;
 using WardrobeOrganizerApp.Repositories.Interface;
 using WardrobeOrganizerApp.Services.Interface;
@@ -24,33 +20,32 @@ namespace WardrobeOrganizerApp.Services.Implementation
             {
                 return new Response<UserResponseModel>
                 {
-                    Message = "Invalid Credentials",
+                    Message = "User not found",
                     Status = false,
                 };
             }
             var password = BCrypt.Net.BCrypt.Verify(model.Password, user.PasswordHash);
-            if (!password)
+            if (password)
             {
+                var token = _jWTSettingsService.GenerateToken(user);
                 return new Response<UserResponseModel>
                 {
-                    Message = "Invalid Credential",
-                    Status = false,
+                    Message = "Login Successful",
+                    Status = true,
+                    Value = new UserResponseModel
+                    {
+                       Id = user.Id,
+                        Email = user.Email,
+                        Token = token,
+                        Roles = user.UserRoles.Select(x => x.Role.Name).ToList(),
+                    }
                 };
-            }
 
-            var token = _jWTSettingsService.GenerateToken(user);
-            
+            }
             return new Response<UserResponseModel>
             {
-                Message = "Login Successful",
-                Status = true,
-                Value = new UserResponseModel
-                {
-                    Id = user.Id,
-                    Email = user.Email,
-                    role = user.role,
-                    Token = token,
-                }
+                Message = "Invalid Credentials",
+                Status = false,
             };
         }
     }

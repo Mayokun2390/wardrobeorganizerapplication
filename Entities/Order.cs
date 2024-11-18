@@ -8,17 +8,14 @@ namespace WardrobeOrganizerApp.Entities
 {
     public class Order
     {
-        public Guid Id{ get; set; } = Guid.NewGuid();
-        public DateTime DateTime{ get; set; }
-        public decimal TotalPrice{ get; set; }
-        public Guid CustomerId{ get; set; }
-        public Guid ProductId{ get; set; }
-        public Status Status { get; set; }
-        public Customer Customer{ get; set; } = default!;
-        public ICollection<OrderProduct> OrderProducts{ get; set; } = new List<OrderProduct>();
-        public int Quantity{ get; set; }
-        public bool IsApproved {get; set; }
-        public ICollection<Order> Orders { get; set; } = new List<Order>();
+        public Guid Id { get; set; }
+        public Guid UserId { get; set; }
+        public Guid CustomerId { get; set; }
+        public DateTime OrderDate { get; set; } = DateTime.UtcNow;
+        public decimal TotalAmount { get; set; }
+        public List<OrderItem> Items { get; set; } = new List<OrderItem>();
+        public int Quantity { get; set; }
+        public OrderStatus OrderStatus { get; set; }
 
     }
 }

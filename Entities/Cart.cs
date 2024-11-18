@@ -2,18 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WardrobeOrganizerApp.Enums;
 
 namespace WardrobeOrganizerApp.Entities
 {
     public class Cart
     {
-        public Guid Id{ get; set; } 
-        public string NameOfProduct{ get; set; } = default!;
-        public int Quantity{ get; set; }
-        public decimal TotalPrice{ get; set; }
-        public Guid ProductId{ get; set; }
-        public Product product{ get; set; } = default!;
-        public ICollection<OrderProduct> OrderProducts{get; set; } = new List<OrderProduct>();
-
+        public Guid Id { get; set; } =  Guid.NewGuid();
+        public Guid UserId { get; set; } =  Guid.NewGuid();
+        public List<CartItem> Items { get; set; } = new List<CartItem>();
     }
 }

@@ -9,7 +9,7 @@ namespace WardrobeOrganizerApp.Dtos
 {
     public class PaymentResponseModel
     {
-        public Guid Id{ get; set; } 
+        public Guid Id{ get; set; } = Guid.NewGuid();
         public decimal Amount{ get; set; }
         public PaymentStatus PaymentStatus{get; set; }
         public DateTime DateCreated{get; set; }

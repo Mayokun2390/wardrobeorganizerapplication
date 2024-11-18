@@ -8,14 +8,14 @@ namespace WardrobeOrganizerApp.Entities
 {
     public class Payment
     {
-        public Guid Id{ get; set; } 
+        public Guid Id{ get; set; } = Guid.NewGuid();
         public decimal Amount{ get; set; }
         public PaymentStatus PaymentStatus{get; set; }
         public DateTime DateCreated{get; set; }
         public Customer Customer {get; set;} = default!;
-        public Guid CustomerId {get; set;}
+        public Guid CustomerId {get; set;} 
         public Order Order {get; set;} = default!;
-        public Guid OrderId {get; set;}
+        public Guid OrderId {get; set;} 
         public string PaymentMethod {get; set;} = default!;
         public string PaymentReference {get; set;} = default!;
     }

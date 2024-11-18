@@ -19,15 +19,18 @@ namespace WardrobeOrganizerApp.Controllers
             _userService = userService;
         }
 
-        [HttpPost]
+        [HttpPost("Login")]
         public async Task<IActionResult> Login(LoginRequestModel model)
         {
             var login = await _userService.Login(model);
-            if (!login.Status == false)
+            if (!login.Status)
             {
-                return BadRequest(login.Message);
+                return BadRequest(new Response<UserResponseModel>
+                {
+                    Message = login.Message,
+                });
             }
-            return Ok(login.Message);
+            return Ok(login);
         }
     }
 }

@@ -2,7 +2,9 @@ namespace WardrobeOrganizerApp.Enums
 {
     public enum Status
     {
-        IsDelivered = 1,
-        Pending
+        IsDelivered,
+        Pending,
+        DisApproved,
+        Approved,
     }
 }

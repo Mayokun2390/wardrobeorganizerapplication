@@ -14,7 +14,7 @@ namespace WardrobeOrganizerApp.Repositories.Interface
         Task<Order> GetOrderById(Guid id);
         Task<ICollection<Order>> GetAllOrder();
         Order Update(Order order);
-        bool Delete(Order orders);
+        bool Delete(Order order);        
         Task<Order> ApprovedOrder (Guid id);
         Task<Order> NotApprovedOrder (Guid id);
         Task<ICollection<Order>> GetAllApprovedOrder(Expression<Func<Order, bool>> predicate); 

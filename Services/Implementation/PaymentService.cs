@@ -116,7 +116,7 @@ namespace WardrobeOrganizerApp.Services.Implementation
             }
             var pro = new Payment
             {
-                CustomerId = getcurrentcustomer.Id,
+                CustomerId = getcurrentcustomer.CustomerId,
                 DateCreated = DateTime.Now,
                 Amount = product.Price,
                 PaymentMethod = "PayStack",

@@ -8,7 +8,7 @@ namespace WardrobeOrganizerApp.Dtos
 {
     public class ChartBotResponseModel
     {
-        public Guid Id{ get; set; } 
+        public Guid Id{ get; set; } = Guid.NewGuid();
         public string MessageText {get; set;} = default!;
         public string ResponseText {get; set;} = default!;
         public DateTime DateCreated{get; set; }
@@ -18,7 +18,7 @@ namespace WardrobeOrganizerApp.Dtos
 
     public class ChartBotRequestModel
     {
-        public Guid Id{ get; set; } 
+        public Guid Id{ get; set; } = Guid.NewGuid();
         public string MessageText {get; set;} = default!;
         public string ResponseText {get; set;} = default!;
     }

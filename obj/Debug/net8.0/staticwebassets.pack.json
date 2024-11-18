@@ -1,0 +1,77 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Users\\HALIYAH BELLO\\Desktop\\WardrobeOrganizerApp\\wwwroot\\CargoPants.jfif",
+      "PackagePath": "staticwebassets\\CargoPants.jfif"
+    },
+    {
+      "Id": "C:\\Users\\HALIYAH BELLO\\Desktop\\WardrobeOrganizerApp\\wwwroot\\bag.jfif",
+      "PackagePath": "staticwebassets\\bag.jfif"
+    },
+    {
+      "Id": "C:\\Users\\HALIYAH BELLO\\Desktop\\WardrobeOrganizerApp\\wwwroot\\sportdress.jpg",
+      "PackagePath": "staticwebassets\\sportdress.jpg"
+    },
+    {
+      "Id": "C:\\Users\\HALIYAH BELLO\\Desktop\\WardrobeOrganizerApp\\wwwroot\\uploads\\0eb27_dressworntoawedding.jpg",
+      "PackagePath": "staticwebassets\\uploads\\0eb27_dressworntoawedding.jpg"
+    },
+    {
+      "Id": "C:\\Users\\HALIYAH BELLO\\Desktop\\WardrobeOrganizerApp\\wwwroot\\uploads\\1b65f_CargoPants.jfif",
+      "PackagePath": "staticwebassets\\uploads\\1b65f_CargoPants.jfif"
+    },
+    {
+      "Id": "C:\\Users\\HALIYAH BELLO\\Desktop\\WardrobeOrganizerApp\\wwwroot\\uploads\\24e2f_hoodie.webp",
+      "PackagePath": "staticwebassets\\uploads\\24e2f_hoodie.webp"
+    },
+    {
+      "Id": "C:\\Users\\HALIYAH BELLO\\Desktop\\WardrobeOrganizerApp\\wwwroot\\uploads\\5c5ba_hoodie.webp",
+      "PackagePath": "staticwebassets\\uploads\\5c5ba_hoodie.webp"
+    },
+    {
+      "Id": "C:\\Users\\HALIYAH BELLO\\Desktop\\WardrobeOrganizerApp\\wwwroot\\uploads\\9ac2c_casual wear.jpg",
+      "PackagePath": "staticwebassets\\uploads\\9ac2c_casual wear.jpg"
+    },
+    {
+      "Id": "C:\\Users\\HALIYAH BELLO\\Desktop\\WardrobeOrganizerApp\\wwwroot\\uploads\\a339c_casual wear.jpg",
+      "PackagePath": "staticwebassets\\uploads\\a339c_casual wear.jpg"
+    },
+    {
+      "Id": "C:\\Users\\HALIYAH BELLO\\Desktop\\WardrobeOrganizerApp\\wwwroot\\uploads\\b443c_sportdress.jpg",
+      "PackagePath": "staticwebassets\\uploads\\b443c_sportdress.jpg"
+    },
+    {
+      "Id": "C:\\Users\\HALIYAH BELLO\\Desktop\\WardrobeOrganizerApp\\wwwroot\\uploads\\c3b92_casual wear.jpg",
+      "PackagePath": "staticwebassets\\uploads\\c3b92_casual wear.jpg"
+    },
+    {
+      "Id": "C:\\Users\\HALIYAH BELLO\\Desktop\\WardrobeOrganizerApp\\wwwroot\\uploads\\d32d0_CargoPants.jfif",
+      "PackagePath": "staticwebassets\\uploads\\d32d0_CargoPants.jfif"
+    },
+    {
+      "Id": "C:\\Users\\HALIYAH BELLO\\Desktop\\WardrobeOrganizerApp\\wwwroot\\uploads\\ebe18_CargoPants.jfif",
+      "PackagePath": "staticwebassets\\uploads\\ebe18_CargoPants.jfif"
+    },
+    {
+      "Id": "C:\\Users\\HALIYAH BELLO\\Desktop\\WardrobeOrganizerApp\\wwwroot\\uploads\\f6666_hoodie.webp",
+      "PackagePath": "staticwebassets\\uploads\\f6666_hoodie.webp"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.WardrobeOrganizerApp.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.WardrobeOrganizerApp.props",
+      "PackagePath": "build\\WardrobeOrganizerApp.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.WardrobeOrganizerApp.props",
+      "PackagePath": "buildMultiTargeting\\WardrobeOrganizerApp.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.WardrobeOrganizerApp.props",
+      "PackagePath": "buildTransitive\\WardrobeOrganizerApp.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

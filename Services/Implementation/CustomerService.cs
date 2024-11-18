@@ -17,7 +17,7 @@ namespace WardrobeOrganizerApp.Services.Implementation
         private readonly IUserInterface _userInterface;
         private readonly IRoleInterface _roleInterface;
         private readonly IUnitOfWork _unitofwork;
-        public CustomerService(ICustomerInterface customerInterface, IUserInterface userInterface, IRoleInterface roleInterface, IUnitOfWork unitofwork) 
+        public CustomerService(ICustomerInterface customerInterface, IUserInterface userInterface, IRoleInterface roleInterface, IUnitOfWork unitofwork)
         {
             _customerInterface = customerInterface;
             _userInterface = userInterface;
@@ -26,105 +26,60 @@ namespace WardrobeOrganizerApp.Services.Implementation
         }
         public async Task<Response<CustomerResponseModel>> CreateCustomer(CustomerRequestModel model)
         {
-            var exist = await _customerInterface.GetCustomerByEmail(m => m.Email == model.Email);
-            var passwordSort = BCrypt.Net.BCrypt.GenerateSalt();
-            var PasswordHash = BCrypt.Net.BCrypt.HashPassword(model.Password,  passwordSort);
-            if (!Regex.IsMatch(model.Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+            var getExistCustomer = await _customerInterface.GetCustomerByEmail(x => x.Email == model.Email);
+            if (getExistCustomer != null)
             {
                 return new Response<CustomerResponseModel>
                 {
-                    Message = "Invalid Email",
-                    Status = false,
+                    Message = "Email already exist",
+                    Status = false
                 };
             }
-            if (exist == null)
+
+            var passwordSalt = BCrypt.Net.BCrypt.GenerateSalt();
+            var passwordHash = BCrypt.Net.BCrypt.HashPassword(model.Password, passwordSalt);
+
+            var user = new User
             {
-                var user = new User
+                UserName = $"{model.FirstName}\t{model.LastName}",
+                Email = model.Email,
+                PasswordSalt = passwordSalt,
+                PasswordHash = passwordHash
+
+            };
+            await _userInterface.CreateUser(user);
+
+
+            var customer = new Customer
+            {
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Email = model.Email,
+                PhoneNumber = model.PhoneNumber,
+            };
+
+            var getRole = await _roleInterface.GetBy(x => x.Name == RoleConstant.Customer);
+            if (getRole == null)
+            {
+                return new Response<CustomerResponseModel>
                 {
-                    Email = model.Email,
-                    PasswordHash = PasswordHash,
-                    PasswordSort = passwordSort,
+                    Message = "Role not found",
+                    Status = false
                 };
-                await _userInterface.CreateUser(user);
-
-                if (model.PhoneNumber.Length != 11)
-                {
-                    return new Response<CustomerResponseModel>
-                    {
-                        Message = "Invalid Number",
-                        Status = false,
-                    };
-                }
-
-                var getPhoneNumber = await _customerInterface.GetCustomerByEmail(x => x.PhoneNumber == model.PhoneNumber);
-                if (getPhoneNumber != null){
-                    return new Response<CustomerResponseModel>{
-                        Message = "Phonenumber already exist",
-                        Status = false,  
-                    };
-                }
-
-                
-                var getRoles = await _roleInterface.GetBy(x => x.Name == RoleConstant.Customer);
-                if (getRoles == null)
-                {
-                    return new Response<CustomerResponseModel>
-                    {
-                        Message = "Role not found",
-                        Status = false,
-                    };
-                }
-               
-               var userroles = new UserRole{
-                RoleId = getRoles.Id,
-                UserId = user.Id,
-               };
-
-               user.UserRoles.Add(userroles);
-
-
-                var customer = new Customer
-                {
-                    Email = model.Email,
-                    FirstName = model.FirstName,
-                    LastName = model.LastName,
-                    PhoneNumber = model.PhoneNumber,
-                    Password = model.Password,
-                };
-                await _customerInterface.Create(customer);
-                var getRole =await _roleInterface.GetBy(x => x.Name == RoleConstant.Customer);
-                if (getRole == null){
-                    return new Response<CustomerResponseModel>{
-                        Message = "Role not found",
-                        Status = false
-                    };
-                }
-
-                var userRole = new UserRole{
-                  UserId = customer.Id,
-                  RoleId = getRole.Id,  
-                };
-                user.UserRoles.Add(userRole);
-
-               return new Response<CustomerResponseModel>
-               {
-                    Message = "Customer Created Successfully",
-                    Status = true,
-                    Value = new CustomerResponseModel
-                    {
-                        Id = customer.Id,
-                        Email = customer.Email,
-                        FirstName = customer.FirstName,
-                        LastName = customer.LastName,
-                        PhoneNumber = customer.PhoneNumber,
-                    }
-               };
             }
+
+            var userRole = new UserRole
+            {
+                RoleId = getRole.Id,
+                UserId = user.Id
+            };
+            user.UserRoles.Add(userRole);
+            await _customerInterface.Create(customer);
+            _unitofwork.SaveChanges();
             return new Response<CustomerResponseModel>
             {
-                Message = "User already exist",
-                Status = false,
-                Value = null,
+                Message = "Registration Successful",
+                Status = true
             };
         }
 
@@ -153,7 +108,7 @@ namespace WardrobeOrganizerApp.Services.Implementation
             var customer = await _customerInterface.GetCustomerByEmail(e => e.Email == email);
             if (customer == null)
             {
-                return new  Response<CustomerResponseModel>
+                return new Response<CustomerResponseModel>
                 {
                     Message = "Customer not found",
                     Status = false,
@@ -177,7 +132,8 @@ namespace WardrobeOrganizerApp.Services.Implementation
         public async Task<Response<ICollection<CustomerResponseModel>>> GetAllCustomers()
         {
             var customer = await _customerInterface.GetAllCustomers();
-            var getCustomers = customer.Select(x => new CustomerResponseModel{  
+            var getCustomers = customer.Select(x => new CustomerResponseModel
+            {
                 FirstName = x.FirstName,
                 LastName = x.LastName,
                 Email = x.Email,
@@ -197,7 +153,7 @@ namespace WardrobeOrganizerApp.Services.Implementation
             var customer = await _customerInterface.GetCustomerById(id);
             if (customer == null)
             {
-                return new  Response<CustomerResponseModel>
+                return new Response<CustomerResponseModel>
                 {
                     Message = "Customer not found",
                     Status = false,
