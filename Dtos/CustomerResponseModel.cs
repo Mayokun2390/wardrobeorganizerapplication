@@ -17,6 +17,7 @@ namespace WardrobeOrganizerApp.Dtos
         public ICollection<Order> Order { get; set; } = new HashSet<Order>();
         public ICollection<Payment> Payment { get; set; } = new HashSet<Payment>();
         public string ChartBotId {get; set;}  = default!;
+
     }
 
 
@@ -27,5 +28,6 @@ namespace WardrobeOrganizerApp.Dtos
         public string PhoneNumber{get; set;} = default!;
         public string Email{ get; set; } = default!;
         public string Password{ get; set; } = default!;
+        
     }
 }

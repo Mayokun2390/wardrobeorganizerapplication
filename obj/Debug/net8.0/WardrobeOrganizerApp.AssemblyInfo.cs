@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("WardrobeOrganizerApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+46548a1475189896b24bbfc828719c0e79c718c7")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a348759192ac25e789b71fc3baa344eb98320f24")]
 [assembly: System.Reflection.AssemblyProductAttribute("WardrobeOrganizerApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("WardrobeOrganizerApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

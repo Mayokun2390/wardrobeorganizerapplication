@@ -40,6 +40,7 @@ namespace WardrobeOrganizerApp.Services.Implementation
             if (cartItem != null)
             {
                 cartItem.Quantity += model.Quantity;
+
             }
             else
             {
@@ -58,6 +59,7 @@ namespace WardrobeOrganizerApp.Services.Implementation
             else
             {
                 await _cartInterface.UpdateCart(cart);
+                _unitofwork.SaveChanges();
             }
             return new Response<AddToCartResponseModel>
             {
@@ -132,7 +134,8 @@ namespace WardrobeOrganizerApp.Services.Implementation
                 };
             }
             var updateCart = new Cart();
-            _cartInterface.UpdateCart(updateCart);
+            updateCart.Items = cart.Items;
+            await _cartInterface.UpdateCart(updateCart);
             _unitofwork.SaveChanges();
             return new Response<AddToCartResponseModel>
             {

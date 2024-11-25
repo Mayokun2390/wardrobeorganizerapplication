@@ -23,5 +23,4 @@ namespace WardrobeOrganizerApp.Dtos
         public int Quantity { get; set; }
 
     }
-
 }

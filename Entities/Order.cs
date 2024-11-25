@@ -15,7 +15,7 @@ namespace WardrobeOrganizerApp.Entities
         public decimal TotalAmount { get; set; }
         public List<OrderItem> Items { get; set; } = new List<OrderItem>();
         public int Quantity { get; set; }
-        public OrderStatus OrderStatus { get; set; }
+        public OrderStatus OrderStatus { get; set; } 
 
     }
 }

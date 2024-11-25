@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WardrobeOrganizerApp.Context;
 
@@ -10,9 +11,11 @@ using WardrobeOrganizerApp.Context;
 namespace WardrobeOrganizerApp.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    partial class StoreContextModelSnapshot : ModelSnapshot
+    [Migration("20241118201415_liyah")]
+    partial class liyah
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -276,12 +279,12 @@ namespace WardrobeOrganizerApp.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("6ec8da4b-8777-44c5-82d7-226ccc1c4f8d"),
+                            Id = new Guid("ed5b29e3-c635-44ca-a5f2-407da0b892e4"),
                             Name = "admin"
                         },
                         new
                         {
-                            Id = new Guid("62b2fba0-1b2f-49cc-8b61-b6edcb9e5356"),
+                            Id = new Guid("31ba4bee-3414-44b6-bc85-51e4613990dc"),
                             Name = "customer"
                         });
                 });
@@ -315,10 +318,10 @@ namespace WardrobeOrganizerApp.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("40220426-fb55-42a4-863a-cd0c695027f1"),
+                            Id = new Guid("420f72c1-19af-4426-84ce-25b0f70da172"),
                             Email = "admin@gmail.com",
-                            PasswordHash = "$2a$11$y6ikqyZOVVFQyIdvfE0QieKpRsP.TkcA6TfKJah5zfZ754XpgawBi",
-                            PasswordSalt = "$2a$11$y6ikqyZOVVFQyIdvfE0Qie",
+                            PasswordHash = "$2a$11$QMExrOeiFS1ofxbPaFDGOOUmB0zrOTw/USQ0rc7YMJqQ8RSwbQT/u",
+                            PasswordSalt = "$2a$11$QMExrOeiFS1ofxbPaFDGOO",
                             UserName = "Mayokun"
                         });
                 });
@@ -346,9 +349,9 @@ namespace WardrobeOrganizerApp.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("30902c84-acff-47ab-b2ba-8e066755cde8"),
-                            RoleId = new Guid("6ec8da4b-8777-44c5-82d7-226ccc1c4f8d"),
-                            UserId = new Guid("40220426-fb55-42a4-863a-cd0c695027f1")
+                            Id = new Guid("d8af9543-6fb3-4714-a032-9ce7cb967b33"),
+                            RoleId = new Guid("ed5b29e3-c635-44ca-a5f2-407da0b892e4"),
+                            UserId = new Guid("420f72c1-19af-4426-84ce-25b0f70da172")
                         });
                 });
 
